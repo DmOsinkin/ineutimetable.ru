@@ -22,15 +22,16 @@ $query = mysql_query("set names utf8", $conn) or die(
 
 $query = "SELECT * FROM lessons";
 
+//Запросы на каждый день недели (пока только понедельник - четверг)
 $mondayQuery = 'SELECT * FROM lessons WHERE `group`="13-САИ" AND `day`=1';
 $tuesdayQuery = 'SELECT * FROM lessons WHERE `group`="13-САИ" AND `day`=2';
 $wednesdayQuery = 'SELECT * FROM lessons WHERE `group`="13-САИ" AND `day`=3';
 $thursdayQuery = 'SELECT * FROM lessons WHERE `group`="13-САИ" AND `day`=4';
 
-$mondayResult = mysql_query($mondayQuery) or die('mondayQuery failed: ' . mysql_error());
-$tuesdaResult = mysql_query($tuesdayQuery) or die('tuesdayQuery failed: ' . mysql_error());
-$wednesdayResult = mysql_query($wednesdayQuery) or die('wednesdayQuery failed: ' . mysql_error());
-$thursdayResult = mysql_query($thursdayQuery) or die('thursdayQuery failed: ' . mysql_error());
+$mondayResult = mysqli_query($mondayQuery) or die('mondayQuery failed: ' . mysqli_error());
+$tuesdaResult = mysqli_query($tuesdayQuery) or die('tuesdayQuery failed: ' . mysqli_error());
+$wednesdayResult = mysqli_query($wednesdayQuery) or die('wednesdayQuery failed: ' . mysqli_error());
+$thursdayResult = mysqli_query($thursdayQuery) or die('thursdayQuery failed: ' . mysqli_error());
 
 echo '<html>
     <head>
@@ -47,15 +48,17 @@ echo '<html>
 <table style="height:110px" width="600px"  border=\'2\'>';
 
 while ($row = mysql_fetch_object($mondayResult)) {
-    echo 
-    "<tr>
-        <td>$row->name</td>
-        <td>$row->day</td>
-        <td>$row->number</td>
-        <td>$row->first_week</td>
-        <td>$row->second_week</td>
-        <td>$row->teacher</td>
-        <td>$row->classroom</td>
-        <td>$row->type</td>
+    echo
+        "<tr>
+            <td><div align='center'>row->number</div></td>
+            <td>
+                <div align='center' valign='top'>row->name<br></div>
+                <div align='left'>row->type<br></div>
+                <div align='left'>row->teacher<br></div>
+                <div align='left'>row->classroom</div>
+            </td>
     </tr>";
 }
+echo '</table>
+</body>
+</html>';
