@@ -6,7 +6,7 @@ $db_password = '';  // Пароль пользователя
 $db_name = 'ineudb';          // Имя базы данных
 
 function getHours($hour) {
-    
+
     switch ($hour) {
         case 1:
             echo "<tr><td style=\"width:90px\"><div align=\'center\'>7.30-9.05</div></td>";
@@ -31,28 +31,14 @@ function getHours($hour) {
     }
 }
 
-// Подключаемся к серверу
-$conn = mysqli_connect($db_host, $db_user, $db_password) or die(
-                "<p>Невозможно подключиться к СУБД: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
+function constructDayByQuery($_query, $_conn) {
 
-// Эта часть кода выполнится только в случае успешного подключения к серверу
-// Выбираем базу данных
-$db = mysqli_select_db($conn, $db_name) or die(
-                "<p>Невозможно подключиться к базе данных: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
-
-// Эта часть кода выполняется только в случае успешного подключения к БД
-// Указываем серверу, что данные, которые мы от него получаем, нам нужны в кодировке UTF-8
-$query = mysqli_query($conn, "set names utf8") or die(
-                "<p>Невозможно выполнить запрос к базе данных: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
-
-function constructDayByQuery($query, $conn) {
-    
-    $result = mysqli_query($conn, $query) or die('mondayQuery failed: ' . mysqli_error());
+    $result = mysqli_query($_conn, $_query) or die('mondayQuery failed: ' . mysqli_error());
     $dayLessonArray = Array();
     $i = 0;
-    
+
     echo '<table style="height:110px" width="600px"  border=\'2\'>';
-    
+
     while ($row = mysqli_fetch_object($result)) {
         $dayLessonArray[$i] = array(
             "number" => $row->number,
@@ -68,6 +54,7 @@ function constructDayByQuery($query, $conn) {
 
     for ($i = 0; $i < count($dayLessonArray); $i++) {
         if ($dayLessonArray[$i]["first_week"] == $dayLessonArray[$i]["second_week"]) {
+            //обычная еженедельная пара
             getHours($dayLessonArray[$i]["number"]);
             echo
             '<td>
@@ -78,8 +65,11 @@ function constructDayByQuery($query, $conn) {
         </td>
     </tr>';
         } else {
+            $isPair = false;
             for ($j = $i + 1; $j < count($dayLessonArray); $j++) {
                 if ($dayLessonArray[$i]['number'] == $dayLessonArray[$j]['number']) {
+                    //Если найдена пара
+                    $isPair = true;
                     getHours($dayLessonArray[$i]["number"]);
                     if ($dayLessonArray[$i]['first_week'] == 1) {
                         echo
@@ -98,8 +88,10 @@ function constructDayByQuery($query, $conn) {
                                 <div align=\'left\'>', $dayLessonArray[$j]['classroom'], '</div>
                             </td>
                         </table>
-                    </td>
-                    </tr>';
+                        </td>
+                        </tr>';
+                        unset($dayLessonArray[$j]);
+                        $dayLessonArray = array_values($dayLessonArray);
                     } else {
                         echo
                         '<td>
@@ -115,17 +107,69 @@ function constructDayByQuery($query, $conn) {
                                 <div align=\'left\'>', $dayLessonArray[$i]['type'], '<br></div>
                                 <div align=\'left\'>', $dayLessonArray[$i]['teacher'], '<br></div>
                                 <div align=\'left\'>', $dayLessonArray[$i]['classroom'], '</div>
+                            </td> 
+                        </table>
+                    </td>
+                    </tr>';
+                        // TODO: функция удаления пары из массива, которая была найдена для четности
+                        unset($dayLessonArray[$j]);
+                        $dayLessonArray = array_values($dayLessonArray);
+                    }
+                }
+            }
+            if (!$isPair) {
+                //Если пара не найдена
+                getHours($dayLessonArray[$i]["number"]);
+                if ($dayLessonArray[$i]['first_week'] == 1) {
+                    echo
+                    '<td>
+                        <table border=\'1\'> 
+                            <td style="width:240px">
+                                <div align=\'center\' valign=\'top\'>', $dayLessonArray[$i]['name'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['type'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['classroom'], '</div>
+                            </td>
+                            <td style="width:240px"></td>
+                        </table>
+                    </td>
+                    </tr>';
+                } else {
+                    echo
+                    '<td>
+                        <table border=\'1\'>
+                            <td style="width:240px"></td>
+                            <td style="width:240px">
+                                <div align=\'center\' valign=\'top\'>', $dayLessonArray[$i]['name'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['type'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div align=\'left\'>', $dayLessonArray[$i]['classroom'], '</div>
                             </td>
                         </table>
                     </td>
                     </tr>';
-                    }
                 }
             }
         }
     }
     echo '</table>';
 }
+
+// Подключаемся к серверу
+$conn = mysqli_connect($db_host, $db_user, $db_password) or die(
+                "<p>Невозможно подключиться к СУБД: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
+
+// Эта часть кода выполнится только в случае успешного подключения к серверу
+// Выбираем базу данных
+$db = mysqli_select_db($conn, $db_name) or die(
+                "<p>Невозможно подключиться к базе данных: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
+
+// Эта часть кода выполняется только в случае успешного подключения к БД
+// Указываем серверу, что данные, которые мы от него получаем, нам нужны в кодировке UTF-8
+$query = mysqli_query($conn, "set names utf8") or die(
+                "<p>Невозможно выполнить запрос к базе данных: " . mysqli_error() . ". Ошибка произошла в строке " . __LINE__ . "</p>");
+
+
 
 //Запросы на каждый день недели (пока только понедельник - четверг)
 $mondayQuery = 'SELECT * FROM lessons WHERE `group`="13-САИ" AND `day`=1 ORDER BY `number`';
@@ -147,10 +191,13 @@ echo '<html>
     <body>';
 echo '<h3>Monday</h3>';
 constructDayByQuery($mondayQuery, $conn);
+
 echo '<h3>Tuesday</h3>';
 constructDayByQuery($tuesdayQuery, $conn);
+
 echo '<h3>Wednesday</h3>';
 constructDayByQuery($wednesdayQuery, $conn);
+
 echo '<h3>Thursday</h3>';
 constructDayByQuery($thursdayQuery, $conn);
 
