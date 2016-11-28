@@ -5,5 +5,15 @@
         <group>
             <file>file:/D:/xampp/htdocs/ineutimetable.ru.git/index.php</file>
         </group>
+        <group name="timetable">
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/other/functions.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/index1.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/header.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/database.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/config.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/body.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/readGroup.php</file>
+            <file>file:/D:/xampp/htdocs/ineutimetable.ru/index.php</file>
+        </group>
     </open-files>
 </project-private>
