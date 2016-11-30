@@ -12,4 +12,7 @@
     </h1>
 </div>
 <hr>
+<div align="right">
+        <script type="text/javascript" src='date.js' charset="utf-8"></script>
+</div>
 </head>
