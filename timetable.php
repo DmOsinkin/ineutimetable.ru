@@ -8,17 +8,26 @@ $db_password = '';  // Пароль пользователя
 $db_name = 'ineudb';          // Имя базы данных
 
 function getHours($_hour) {
-    //if ($_housing > 5) {
-    $hours = array(
-        1 => "7.30-9.05",
-        2 => "9.20-10.55",
-        3 => "11.10-12.45",
-        4 => "13.15-14.50",
-        5 => "15.00-16.35",
-        6 => "16.45-18.20"
-    );
-    //} else {}
-    return $hours[$_hour];
+    if ($_hour['housing'] < 5) {
+        $hours = array(
+            1 => "7.30-9.05",
+            2 => "9.20-10.55",
+            3 => "11.10-12.45",
+            4 => "13.15-14.50",
+            5 => "15.00-16.35",
+            6 => "16.45-18.20"
+        );
+    } else {
+        $hours = array(
+            1 => "8.00-9.35",
+            2 => "9.50-11.25",
+            3 => "11.40-13.15",
+            4 => "13.45-15.20",
+            5 => "15.30-17.05",
+            6 => "17.15-18.50"
+        );
+    }
+    return $hours[$_hour['number']];
 }
 
 function constructDayByQuery($_query, $_conn) {
@@ -35,16 +44,17 @@ function constructDayByQuery($_query, $_conn) {
             "classroom" => $row->classroom,
             "type" => $row->type,
             "teacher" => $row->teacher,
+            "housing" => $row->housing,
         );
         $i++;
     }
     echo '<table width="600px" border=\'3\'>';
-    
+
     for ($i = 0; $i < count($dayLessonArray); $i++) {
         if ($dayLessonArray[$i]["first_week"] == $dayLessonArray[$i]["second_week"]) {
             //обычная еженедельная пара
             echo '<tr><td style="width:110px" height="100px"><div align=\'center\'>'
-                    . getHours($dayLessonArray[$i]["number"]) . '</div></td>';
+            . getHours($dayLessonArray[$i]) . '</div></td>';
             echo
             '<td height="90px">
             <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]["name"], '<br></div>
@@ -60,7 +70,7 @@ function constructDayByQuery($_query, $_conn) {
                     //Если найдена пара
                     $isPair = true;
                     echo '<tr><td style="width:110px" height="90px"><div align=\'center\'>'
-                    . getHours($dayLessonArray[$i]["number"]) . '</div></td>';
+                    . getHours($dayLessonArray[$i]) . '</div></td>';
                     if ($dayLessonArray[$i]['first_week'] == 1) {
                         echo
                         '<td>
@@ -110,7 +120,7 @@ function constructDayByQuery($_query, $_conn) {
             if (!$isPair) {
                 //Если пара не найдена
                 echo '<tr><td style="width:90px" height="90px"><div align=\'center\'>'
-                . getHours($dayLessonArray[$i]["number"]) . '</div></td>';
+                . getHours($dayLessonArray[$i]) . '</div></td>';
                 if ($dayLessonArray[$i]['first_week'] == 1) {
                     echo
                     '<td>
