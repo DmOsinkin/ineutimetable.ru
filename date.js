@@ -7,5 +7,4 @@ var options = {
 };
 
 
-//document.write("TODO: <u>(не) четная неделя</u><br>");
 document.write(date.toLocaleString("ru", options));
