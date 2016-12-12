@@ -208,8 +208,8 @@ constructDayByQuery($mondayQuery, $conn);
 constructDayByQuery($tuesdayQuery, $conn);
 constructDayByQuery($wednesdayQuery, $conn);
 constructDayByQuery($thursdayQuery, $conn);
-constructDayByQuery($tuesdayQuery, $conn);
 constructDayByQuery($fridayQuery, $conn);
+constructDayByQuery($saturdayQuery, $conn);
 constructDayByQuery($sundayQuery, $conn);
 
 mysqli_close($conn);
