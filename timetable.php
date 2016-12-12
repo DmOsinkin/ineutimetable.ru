@@ -7,6 +7,19 @@ $db_user = 'root';  // Имя пользователя
 $db_password = 'LVBNHBQ';  // Пароль пользователя
 $db_name = 'ineudb';          // Имя базы данных
 
+function getDay($_day) {
+    $days = array(
+        1 => "Понедельник",
+        2 => "Вторник",
+        3 => "Среда",
+        4 => "Четверг",
+        5 => "Пятница",
+        6 => "Суббота",
+        6 => "Воскресение",
+    );
+    return $days[$_day];
+}
+
 function getHours($_hour) {
     if ($_hour['housing'] < 5) {
         $hours = array(
@@ -33,47 +46,51 @@ function getHours($_hour) {
 function constructDayByQuery($_query, $_conn) {
 
     $result = mysqli_query($_conn, $_query) or die('Query failed: ' . mysqli_error());
-    $dayLessonArray = Array();
-    $i = 0;
-    while ($row = mysqli_fetch_object($result)) {
-        $dayLessonArray[$i] = array(
-            "number" => $row->number,
-            "first_week" => $row->first_week,
-            "second_week" => $row->second_week,
-            "name" => $row->name,
-            "classroom" => $row->classroom,
-            "type" => $row->type,
-            "teacher" => $row->teacher,
-            "housing" => $row->housing,
-        );
-        $i++;
-    }
-    echo '<table width="600px" border=\'3\'>';
+    if ($result) {
+        
+        $dayLessonArray = Array();
+        $i = 0;
+        while ($row = mysqli_fetch_object($result)) {
+            $dayLessonArray[$i] = array(
+                "number" => $row->number,
+                "first_week" => $row->first_week,
+                "second_week" => $row->second_week,
+                "name" => $row->name,
+                "classroom" => $row->classroom,
+                "type" => $row->type,
+                "teacher" => $row->teacher,
+                "housing" => $row->housing,
+                "day" => $row->day
+            );
+            $i++;
+        }
+        echo '<h3>' . getDay($dayLessonArray[0]["day"]) . '</h3>';
+        echo '<table width="600px" border=\'3\'>';
 
-    for ($i = 0; $i < count($dayLessonArray); $i++) {
-        if ($dayLessonArray[$i]["first_week"] == $dayLessonArray[$i]["second_week"]) {
-            //обычная еженедельная пара
-            echo '<tr><td style="width:110px" height="100px"><div align=\'center\'>'
-            . getHours($dayLessonArray[$i]) . '</div></td>';
-            echo
-            '<td height="90px">
+        for ($i = 0; $i < count($dayLessonArray); $i++) {
+            if ($dayLessonArray[$i]["first_week"] == $dayLessonArray[$i]["second_week"]) {
+                //обычная еженедельная пара
+                echo '<tr><td style="width:110px" height="100px"><div align=\'center\'>'
+                . getHours($dayLessonArray[$i]) . '</div></td>';
+                echo
+                '<td height="90px">
             <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]["name"], '<br></div>
             <div align=\'left\' height="25px">', $dayLessonArray[$i]["type"], '<br></div>
             <div align=\'left\' height="25px">', $dayLessonArray[$i]["teacher"], '<br></div>
             <div align=\'left\' height="25px">', $dayLessonArray[$i]["classroom"], '</div>
         </td>
     </tr>';
-        } else {
-            $isPair = false;
-            for ($j = $i + 1; $j < count($dayLessonArray); $j++) {
-                if ($dayLessonArray[$i]['number'] == $dayLessonArray[$j]['number']) {
-                    //Если найдена пара
-                    $isPair = true;
-                    echo '<tr><td style="width:110px" height="90px"><div align=\'center\'>'
-                    . getHours($dayLessonArray[$i]) . '</div></td>';
-                    if ($dayLessonArray[$i]['first_week'] == 1) {
-                        echo
-                        '<td>
+            } else {
+                $isPair = false;
+                for ($j = $i + 1; $j < count($dayLessonArray); $j++) {
+                    if ($dayLessonArray[$i]['number'] == $dayLessonArray[$j]['number']) {
+                        //Если найдена пара
+                        $isPair = true;
+                        echo '<tr><td style="width:110px" height="90px"><div align=\'center\'>'
+                        . getHours($dayLessonArray[$i]) . '</div></td>';
+                        if ($dayLessonArray[$i]['first_week'] == 1) {
+                            echo
+                            '<td>
                         <table border=\'1\' height="100px"> 
                             <td style="width:240px">
                                 <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
@@ -90,11 +107,11 @@ function constructDayByQuery($_query, $_conn) {
                         </table>
                         </td>
                         </tr>';
-                        unset($dayLessonArray[$j]);
-                        $dayLessonArray = array_values($dayLessonArray);
-                    } else {
-                        echo
-                        '<td>
+                            unset($dayLessonArray[$j]);
+                            $dayLessonArray = array_values($dayLessonArray);
+                        } else {
+                            echo
+                            '<td>
                         <table border=\'1\' height="100px">
                             <td style="width:240px">
                                 <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$j]['name'], '<br></div>
@@ -111,19 +128,19 @@ function constructDayByQuery($_query, $_conn) {
                         </table>
                     </td>
                     </tr>';
-                        // TODO: функция удаления пары из массива, которая была найдена для четности
-                        unset($dayLessonArray[$j]);
-                        $dayLessonArray = array_values($dayLessonArray);
+                            // TODO: функция удаления пары из массива, которая была найдена для четности
+                            unset($dayLessonArray[$j]);
+                            $dayLessonArray = array_values($dayLessonArray);
+                        }
                     }
                 }
-            }
-            if (!$isPair) {
-                //Если пара не найдена
-                echo '<tr><td style="width:90px" height="90px"><div align=\'center\'>'
-                . getHours($dayLessonArray[$i]) . '</div></td>';
-                if ($dayLessonArray[$i]['first_week'] == 1) {
-                    echo
-                    '<td>
+                if (!$isPair) {
+                    //Если пара не найдена
+                    echo '<tr><td style="width:90px" height="90px"><div align=\'center\'>'
+                    . getHours($dayLessonArray[$i]) . '</div></td>';
+                    if ($dayLessonArray[$i]['first_week'] == 1) {
+                        echo
+                        '<td>
                         <table border=\'1\' height="100px"> 
                             <td style="width:240px">
                                 <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
@@ -135,9 +152,9 @@ function constructDayByQuery($_query, $_conn) {
                         </table>
                     </td>
                     </tr>';
-                } else {
-                    echo
-                    '<td>
+                    } else {
+                        echo
+                        '<td>
                         <table border=\'1\' height="100px">
                             <td style="width:240px"></td>
                             <td style="width:240px" height="100px">
@@ -149,11 +166,12 @@ function constructDayByQuery($_query, $_conn) {
                         </table>
                     </td>
                     </tr>';
+                    }
                 }
             }
         }
+        echo '</table>';
     }
-    echo '</table>';
 }
 
 // Подключаемся к серверу
@@ -177,6 +195,10 @@ $mondayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND
 $tuesdayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=2 ORDER BY `number`';
 $wednesdayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=3 ORDER BY `number`';
 $thursdayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=4 ORDER BY `number`';
+$fridayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=5 ORDER BY `number`';
+$saturdayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=6 ORDER BY `number`';
+$sundayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=7 ORDER BY `number`';
+
 
 echo '<h3>Monday</h3>';
 constructDayByQuery($mondayQuery, $conn);
