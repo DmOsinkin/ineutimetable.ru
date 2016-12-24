@@ -11,14 +11,14 @@ require_once('functions.php');
 $auth = false;
 
 // Если была нажата кнопка авторизации
-if(isset($_POST['submit'])) {
+if(isset($_GET['submit'])) {
 	// Делаем массив сообщений об ошибках пустым
 	$errors['login'] = $errors['password'] = $errors['password_again'] = '';
 	
 	// С помощью стандартной функции trim() удалим лишние пробелы
 	// из введенных пользователем данных
-	$login = trim($_POST['login']);
-	$password = trim($_POST['password']);
+	$login = trim($_GET['login']);
+	$password = trim($_GET['password']);
 	
 	// Авторизуем пользователя
 	// Вызываем функцию регистрации, её результат записываем в переменную

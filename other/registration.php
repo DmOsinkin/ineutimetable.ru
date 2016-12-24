@@ -17,15 +17,15 @@ $fields = array();
 $reg = false;
 
 // Если была нажата кнопка регистрации
-if(isset($_POST['submit'])) {
+if(isset($_GET['submit'])) {
 	// Делаем массив сообщений об ошибках пустым
 	$errors['login'] = $errors['password'] = $errors['password_again'] = '';
 	
 	// С помощью стандартной функции trim() удалим лишние пробелы
 	// из введенных пользователем данных
-	$fields['login'] = trim($_POST['login']);
-	$password = trim($_POST['password']);
-	$password_again = trim($_POST['password_again']);
+	$fields['login'] = trim($_GET['login']);
+	$password = trim($_GET['password']);
+	$password_again = trim($_GET['password_again']);
 	
 	// Если логин не пройдет проверку, будет сообщение об ошибке
 	$errors['login'] = checkLogin($fields['login']) === true ? '' : checkLogin($fields['login']);
