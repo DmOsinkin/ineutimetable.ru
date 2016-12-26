@@ -68,21 +68,24 @@ function constructDayByQuery($_query, $_conn) {
         );
         $i++;
     }
-    echo '<h3>' . getDay($dayLessonArray[0]["day"]) . '</h3>';
-    echo '<table width="600px" border=\'3\'>';
+
+    echo '<h3 class="day">' . getDay($dayLessonArray[0]["day"]) . '</h3>';
+    echo '<table class="custom-table">';
 
     for ($i = 0; $i < count($dayLessonArray); $i++) {
         if ($dayLessonArray[$i]["first_week"] == $dayLessonArray[$i]["second_week"]) {
             //обычная еженедельная пара
-            echo '<tr><td style="width:110px" height="100px"><div align=\'center\'>'
+            echo '<tr class="tr-full"><td class="td-hours"><div class="div_HoursFull">'
             . getHours($dayLessonArray[$i]) . '</div></td>';
             echo
-            '<td height="90px">
-            <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]["name"], '<br></div>
-            <div align=\'left\' height="25px">', $dayLessonArray[$i]["type"], '<br></div>
-            <div align=\'left\' height="25px">', $dayLessonArray[$i]["teacher"], '<br></div>
-            <div align=\'left\' height="25px">', $dayLessonArray[$i]["classroom"], '</div>
-        </td>
+            '<td class="td-full">
+            <div class="info-full">
+            <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]["name"], '<br></div>
+            <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$i]["type"], '<br></div>
+            <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$i]["teacher"], '<br></div>
+            <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$i]["classroom"], '</div>
+            </div>
+            </td>
     </tr>';
         } else {
             $isPair = false;
@@ -90,23 +93,23 @@ function constructDayByQuery($_query, $_conn) {
                 if ($dayLessonArray[$i]['number'] == $dayLessonArray[$j]['number']) {
                     //Если найдена пара
                     $isPair = true;
-                    echo '<tr><td style="width:110px" height="90px"><div align=\'center\'>'
+                    echo '<tr class="tr-pair"><td class="td-hours" style="width:110px" height="90px"><div class="div_HoursPair" align=\'center\'>'
                     . getHours($dayLessonArray[$i]) . '</div></td>';
                     if ($dayLessonArray[$i]['first_week'] == 1) {
                         echo
-                        '<td>
-                        <table border=\'1\' height="100px"> 
-                            <td style="width:245px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
+                        '<td class="td-pair">
+                        <table class="table-pair"> 
+                            <td class="td-left" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
+                                <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
                             </td>
-                            <td style="width:245px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$j]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['classroom'], '</div>
+                            <td class="td-right" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$j]['name'], '<br></div>
+                                <div class="typr-full" align=\'left\' height="25px">', $dayLessonArray[$j]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$j]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$j]['classroom'], '</div>
                             </td>
                         </table>
                         </td>
@@ -115,20 +118,20 @@ function constructDayByQuery($_query, $_conn) {
                         $dayLessonArray = array_values($dayLessonArray);
                     } else {
                         echo
-                        '<td>
-                        <table border=\'1\' height="100px">
-                            <td style="width:245px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$j]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$j]['classroom'], '</div>
+                        '<td class="td-pair">
+                        <table class="table-pair"> 
+                            <td class="td-left" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$j]['name'], '<br></div>
+                                <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$j]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$j]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$j]['classroom'], '</div>
                             </td>
-                            <td style="width:245px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
-                            </td> 
+                            <td class="td-right" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
+                                <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
+                            </td>
                         </table>
                     </td>
                     </tr>';
@@ -140,32 +143,32 @@ function constructDayByQuery($_query, $_conn) {
             }
             if (!$isPair) {
                 //Если пара не найдена
-                echo '<tr><td style="width:110px" height="90px"><div align=\'center\'>'
+                echo '<tr class="tr-pair"><td class="td-hours" style="width:110px" height="90px"><div class="div_HoursPair" align=\'center\'>'
                 . getHours($dayLessonArray[$i]) . '</div></td>';
                 if ($dayLessonArray[$i]['first_week'] == 1) {
                     echo
-                    '<td>
-                        <table border=\'1\' height="100px"> 
-                            <td style="width:245px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
+                    '<td class="td-pair">
+                        <table class="table-pair"> 
+                            <td class="td-left" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
+                                <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
                             </td>
-                            <td style="width:245px" height="100px"></td>
+                            <td class="td-right" style="width:245px" height="100px"></td>
                         </table>
                     </td>
                     </tr>';
                 } else {
                     echo
-                    '<td>
-                        <table border=\'1\' height="100px">
-                            <td style="width:245px"></td>
-                            <td style="width:245px" height="100px">
-                                <div align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
-                                <div align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
+                    '<td class="td-pair">
+                        <table class="table-pair">
+                            <td class="td-left" style="width:245px" height="100px"></td>
+                            <td class="td-right" style="width:245px">
+                                <div class="name-full" align=\'center\' valign=\'top\' height="25px">', $dayLessonArray[$i]['name'], '<br></div>
+                                <div class="type-full" align=\'left\' height="25px">', $dayLessonArray[$i]['type'], '<br></div>
+                                <div class="teacher-full" align=\'left\' height="25px">', $dayLessonArray[$i]['teacher'], '<br></div>
+                                <div class="classroom-full" align=\'left\' height="25px">', $dayLessonArray[$i]['classroom'], '</div>
                             </td>
                         </table>
                     </td>

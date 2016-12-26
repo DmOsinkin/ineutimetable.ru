@@ -1,26 +1,83 @@
-/* файл style.css */
-.row {
-	margin-bottom:10px;
-	width:220px;
+body {
+    background-color: rgb(250, 255, 250);
+    font-family: Arial;
 }
-	.row label {
-		display:block;
-		font-weight:bold;
-	}
-	.row input.text {
-		font-size:1.2em;
-		padding:2px 5px;
-	}
-.to_reg {
-	font-size:0.9em;
+.date-custom {
+    text-align: right;
 }
-.instruction {
-	font-size:0.8em;
-	color:#aaaaaa;
-	margin-left:2px;
-	cursor:default;
+.head-custom {
+    font-size: 30px;
+    background-color: #00991b;
+    color: white;
+    text-align: center;
 }
-.error {
-	color:red;
-	margin-left:3px;
+a {
+    text-decoration:none;
+    color: #008CBA;
+}
+
+.day {
+    text-align: center;
+    border: 2px solid gray;
+    border-radius: 7px;
+    width: 600px;
+    margin-left:auto; 
+    margin-right:auto;
+}
+.custom-table {
+    border: 2px solid gray;
+    width: 600px;
+    margin-left:auto; 
+    margin-right:auto;
+    border-collapse: collapse;
+    border-radius: 5px;
+}
+.tr-full,
+.td-full {
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+    text-align: center;
+}
+
+tr {
+    height: 80px;
+}
+
+.info-full {
+    text-align: center;
+}
+.td-hours {
+    background-color: #8bf79f;
+    width:110px;
+    height:100px;
+    text-align: center;
+}
+.td-full {
+    background-color: #ececec;
+}
+
+.name-full, 
+.teacher-full, 
+.type-full, 
+.classroom-full  {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.td-pair,
+.tr-pair{
+    background-color: #ececec;
+    border-bottom: 1px solid black;
+    border-left: 1px solid black;
+}
+.table-pair {
+    border-collapse: collapse;
+}
+.td-left {
+
+    width: 50%;
+}
+.td-right {
+    border-left: 1px solid black;
+    width: 50%;
 }
