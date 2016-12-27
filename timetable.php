@@ -205,7 +205,7 @@ $fridayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND
 $saturdayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=6 ORDER BY `number`';
 $sundayQuery = 'SELECT * FROM lessons WHERE `group`="' . $_GET['group'] . '" AND `day`=7 ORDER BY `number`';
 
-echo 'Открыто рассписание группы ' . $_GET['group'] . ':';
+echo '<br>Открыто рассписание группы ' . $_GET['group'] . ':';
 
 constructDayByQuery($mondayQuery, $conn);
 constructDayByQuery($tuesdayQuery, $conn);
